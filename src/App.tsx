@@ -17,22 +17,28 @@ export const goodsFromServer = [
   'Garlic',
 ];
 
+enum SortType {
+  NONE,
+  ALPHABET,
+  LENGTH,
+}
+
 export const App: React.FC = () => {
   const [goods, setGoods] = useState([...goodsFromServer]);
-  const [visable, setVisable] = useState(false);
-  const [sortType, setSortType] = useState('NONE');
+  const [visible, setVisable] = useState(false);
+  const [sortType, setSortType] = useState(SortType.NONE);
   const [isReversed, setReverse] = useState(false);
 
   const infoBtn = classNames({
     button: true,
     'is-info': true,
-    'is-light': sortType !== 'ALPH',
+    'is-light': sortType !== SortType.ALPHABET,
   });
 
   const succBtn = classNames({
     button: true,
-    'is-succes': true,
-    'is-light': sortType !== 'LENG',
+    'is-success': true,
+    'is-light': sortType !== SortType.LENGTH,
   });
 
   const warnBtn = classNames({
@@ -43,7 +49,7 @@ export const App: React.FC = () => {
 
   const finnalGoods = [...goods];
 
-  const resetBtn = visable || isReversed;
+  const resetBtn = visible || isReversed;
 
   if (isReversed) {
     finnalGoods.reverse();
@@ -56,9 +62,9 @@ export const App: React.FC = () => {
           type="button"
           className={infoBtn} //"button is-info is-light"
           onClick={() => {
-            setGoods(goods.sort((a, b) => a.localeCompare(b)));
+            setGoods([...goods].sort((a, b) => a.localeCompare(b)));
             setVisable(true);
-            setSortType('ALPH');
+            setSortType(SortType.ALPHABET);
           }}
         >
           Sort alphabetically
@@ -68,9 +74,9 @@ export const App: React.FC = () => {
           type="button"
           className={succBtn} //"button is-success is-light"
           onClick={() => {
-            setGoods(goods.sort((a, b) => a.length - b.length));
+            setGoods([...goods].sort((a, b) => a.length - b.length));
             setVisable(true);
-            setSortType('LENG');
+            setSortType(SortType.LENGTH);
           }}
         >
           Sort by length
@@ -81,7 +87,7 @@ export const App: React.FC = () => {
           className={warnBtn} //"button is-warning is-light"
           onClick={() => {
             // setGoods(goods.reverse());
-            setVisable(!visable);
+            setVisable(!visible);
             setReverse(!isReversed);
           }}
         >
@@ -95,7 +101,7 @@ export const App: React.FC = () => {
             onClick={() => {
               setGoods([...goodsFromServer]);
               setVisable(false);
-              setSortType('NONE');
+              setSortType(SortType.NONE);
               setReverse(false);
             }}
           >
